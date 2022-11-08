@@ -1,0 +1,66 @@
+
+CREATE TABLE status(
+	status_id bigint NOT NULL PRIMARY KEY,
+	status varchar(255) NOT NULL
+);
+
+CREATE TABLE user_(
+	user_id bigint NOT NULL PRIMARY KEY,
+	create_date date ,
+	update_date date,
+	created_by bigint,
+	updated_by bigint,
+	status_id bigint,
+	full_name varchar(255),
+	normalize_name varchar(255),
+	email varchar(100) UNIQUE,
+	CONSTRAINT fk_status
+	FOREIGN KEY(status_id)
+	REFERENCES status(status_id)
+);
+
+CREATE TABLE organization(
+	organization_id bigint NOT NULL PRIMARY KEY,
+	create_date date,
+	update_date date,
+	created_by bigint,
+	updated_by bigint,
+	organization_name varchar(255),
+	normalized_name varchar(255),
+	registry_number varchar(255) UNIQUE,
+	founded_year int,
+	phone varchar(15),
+	company_size int,
+	email varchar(100) UNIQUE,
+	CONSTRAINT fk_user_
+	FOREIGN KEY(created_by)
+	REFERENCES user_(user_id)
+);
+
+CREATE TABLE invitation(
+	invitation_id bigint NOT NULL PRIMARY KEY,
+	status_id bigint NOT NULL,
+	user_id bigint NOT NULL,
+	invitation_message varchar(255),
+	create_date date ,
+	update_date date,
+	created_by bigint ,
+	updated_by bigint ,
+	organization_id bigint NOT NULL,
+	CONSTRAINT fk_user
+	FOREIGN KEY(user_id)
+	REFERENCES user_(user_id),
+	CONSTRAINT fk_status
+	FOREIGN KEY(status_id)
+	REFERENCES status(status_id),
+	CONSTRAINT fk_organization
+	FOREIGN KEY(organization_id)
+	REFERENCES organization(organization_id)
+);
+!!!!!!!!!!
+Note that you disabled the OSIV by typing spring.jpa.open-in-view=false
+So if there will be any issues about that while handling a request 
+just remember to change it.
+
+
+
